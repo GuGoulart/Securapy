@@ -1,67 +1,169 @@
 import socket
 import threading
-import sys
+from datetime import datetime
 
-HOST = "127.0.0.1"
+
+HOST = "0.0.0.0"
 PORTA = 9999
+MAX_CLIENTES = 10
 
 
-def receber_alertas(cliente):
-
-    while True:
-        try:
-            dados = cliente.recv(4096)
-            if not dados:
-                print("\n[SISTEMA] Servidor encerrou a conexão.")
-                break
-            print(dados.decode("utf-8"), end="", flush=True)
-        except (ConnectionResetError, ConnectionAbortedError, OSError):
-            print("\n[SISTEMA] Conexão com o servidor perdida.")
-            break
+clientes = {}       
+lock = threading.Lock()
+historico_alertas = []
 
 
-def conectar_servidor(host=HOST, porta=PORTA):
-   
-    cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+def formatar_alerta(alerta_dict):
+    
+    if isinstance(alerta_dict, str):
+        return alerta_dict
 
-    try:
-        cliente.connect((host, porta))
-        print(f"Conectado ao SecuraPy SIEM ({host}:{porta})")
-    except ConnectionRefusedError:
-        print(f"[ERRO] Não foi possível conectar ao servidor em {host}:{porta}.")
-        print("Certifique-se de que o 'servidor_alertas.py' está em execução.")
-        return
+    timestamp_raw = str(alerta_dict.get("timestamp", datetime.now().strftime("%H:%M:%S")))
+    
+    if " " in timestamp_raw:
+        hora = timestamp_raw.split(" ")[1]
+    elif len(timestamp_raw) >= 8 and ":" in timestamp_raw:
+        hora = timestamp_raw[-8:]
+    else:
+        hora = timestamp_raw
 
-    thread_escuta = threading.Thread(
-        target=receber_alertas,
-        args=(cliente,),
-        daemon=True
-    )
-    thread_escuta.start()
+    severidade = str(alerta_dict.get("severidade", "INFO")).upper()
+    regra = alerta_dict.get("regra_nome", alerta_dict.get("regra", "Alerta Generalizado"))
+    ip = alerta_dict.get("ip", "0.0.0.0")
+    descricao = alerta_dict.get("descricao", "Sem detalhes adicionais")
 
-    try:
-        while True:
-            comando = input()
-            if not comando.strip():
-                continue
+    return f"[{hora}] [{severidade}] {regra} - {ip} - {descricao}"
 
+
+def broadcast_alerta(alerta):
+    
+    if isinstance(alerta, dict):
+        alerta_fmt = formatar_alerta(alerta)
+    else:
+        alerta_fmt = str(alerta)
+
+    with lock:
+        historico_alertas.append(alerta_fmt)
+        
+        if len(historico_alertas) > 200:
+            historico_alertas.pop(0)
+
+        desconectados = []
+        for conexao in list(clientes.keys()):
             try:
-                cliente.sendall(comando.strip().encode("utf-8"))
-            except (BrokenPipeError, OSError):
-                break
+                conexao.sendall((alerta_fmt + "\n").encode("utf-8"))
+            except (BrokenPipeError, ConnectionResetError, OSError):
+                desconectados.append(conexao)
 
-            if comando.strip() == "/sair":
-                break
+        for conexao in desconectados:
+            _remover_cliente_interno(conexao)
 
-    except (KeyboardInterrupt, EOFError):
-        print("\nDesconectando...")
+
+def _remover_cliente_interno(conexao):
+
+    if conexao in clientes:
+        endereco = clientes.pop(conexao)
         try:
-            cliente.sendall("/sair".encode("utf-8"))
+            conexao.close()
         except Exception:
             pass
+        hora_atual = datetime.now().strftime("%H:%M:%S")
+        print(f"[{hora_atual}] Cliente desconectado: {endereco[0]}:{endereco[1]}")
+
+
+def remover_cliente(conexao):
+
+    with lock:
+        _remover_cliente_interno(conexao)
+
+
+def tratar_cliente(conexao, endereco):
+    
+    hora_atual = datetime.now().strftime("%H:%M:%S")
+    print(f"[{hora_atual}] Cliente conectado: {endereco[0]}:{endereco[1]}")
+
+    with lock:
+        clientes[conexao] = endereco
+
+    try:
+        boas_vindas = (
+            "=== Conectado ao SecuraPy SIEM ===\n"
+            "Comandos: /status, /historico, /sair\n"
+        )
+        conexao.sendall(boas_vindas.encode("utf-8"))
+
+        while True:
+            dados = conexao.recv(1024)
+            if not dados:
+                break
+
+            comando = dados.decode("utf-8").strip()
+
+            if comando == "/status":
+                with lock:
+                    total_clientes = len(clientes)
+                    total_alertas = len(historico_alertas)
+                resposta = f"Clientes conectados: {total_clientes} | Alertas na sessão: {total_alertas}\n"
+                conexao.sendall(resposta.encode("utf-8"))
+
+            elif comando == "/historico":
+                with lock:
+                    ultimos_10 = historico_alertas[-10:]
+
+                if not ultimos_10:
+                    resposta = "Nenhum alerta registrado na sessão.\n"
+                else:
+                    resposta = "\n".join(ultimos_10) + "\n"
+                conexao.sendall(resposta.encode("utf-8"))
+
+            elif comando == "/sair":
+                conexao.sendall("Desconectando...\n".encode("utf-8"))
+                break
+
+            elif comando:
+                conexao.sendall("Comando inválido. Use: /status, /historico ou /sair\n".encode("utf-8"))
+
+    except (ConnectionResetError, ConnectionAbortedError, OSError):
+        pass
     finally:
-        cliente.close()
+        remover_cliente(conexao)
+
+
+def iniciar_servidor(host=HOST, porta=PORTA):
+   
+    servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    servidor.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+    try:
+        servidor.bind((host, porta))
+        servidor.listen(MAX_CLIENTES)
+        print("=== Servidor de Alertas SecuraPy ===")
+        print(f"Rodando em {host}:{porta}")
+        print("Aguardando conexões...\n")
+
+        while True:
+            conexao, endereco = servidor.accept()
+            thread = threading.Thread(
+                target=tratar_cliente,
+                args=(conexao, endereco),
+                daemon=True
+            )
+            thread.start()
+
+    except KeyboardInterrupt:
+        print("\n[SERVIDOR] Encerrando servidor por comando de teclado...")
+    finally:
+        with lock:
+            for conexao in list(clientes.keys()):
+                try:
+                    conexao.sendall("\n[SERVIDOR] Servidor encerrado.\n".encode("utf-8"))
+                    conexao.close()
+                except Exception:
+                    pass
+            clientes.clear()
+        servidor.close()
+        print("[SERVIDOR] Servidor desligado com sucesso.")
 
 
 if __name__ == "__main__":
-    conectar_servidor()
+    iniciar_servidor()
