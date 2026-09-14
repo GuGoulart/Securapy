@@ -6,7 +6,12 @@ definida na Seção 4 do enunciado (Integração dos Módulos).
 """
 
 import os
+import sys
 from datetime import datetime
+
+# Garante que o terminal exibe corretamente caracteres UTF-8 (ex: caracteres do menu)
+sys.stdout.reconfigure(encoding='utf-8')
+sys.stderr.reconfigure(encoding='utf-8')
 
 from coletor import carregar_todos_os_logs
 from regras import carregar_regras, aplicar_regras
@@ -32,7 +37,22 @@ ARQUIVO_REGRAS = "config/regras.json"
 BLACKLIST = {"185.220.101.1", "45.33.32.156", "91.240.118.172", "23.94.5.100"}
 
 
+def _serializar_resumo(resumo):
+    """
+    Converte recursivamente sets em listas para que o resumo de ameacas
+    possa ser serializado como JSON (sets nao sao suportados pelo json.dump).
+    """
+    if isinstance(resumo, list):
+        return [_serializar_resumo(item) for item in resumo]
+    if isinstance(resumo, dict):
+        return {chave: _serializar_resumo(valor) for chave, valor in resumo.items()}
+    if isinstance(resumo, set):
+        return sorted(list(resumo))
+    return resumo
+
+
 def main():
+
     eventos = []
     alertas = []
     alertas_enriquecidos = []
@@ -56,8 +76,9 @@ def main():
 
             brute_force = detectar_brute_force(eventos)
             port_scan = detectar_port_scan(eventos)
-            ips_blacklist, _contagem_blacklist = verificar_blacklist(eventos, BLACKLIST)
-            resumo_ameacas = gerar_resumo_ameacas(brute_force, port_scan, ips_blacklist)
+            resultado_blacklist = verificar_blacklist(eventos, BLACKLIST)
+            ips_blacklist = resultado_blacklist[0]
+            resumo_ameacas = gerar_resumo_ameacas(brute_force, port_scan, resultado_blacklist)
 
             logs_carregados = True
 
@@ -164,7 +185,7 @@ def main():
                 "gerado_em": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "total_eventos": len(eventos),
                 "total_alertas": len(alertas),
-                "resumo_ameacas": resumo_ameacas,
+                "resumo_ameacas": _serializar_resumo(resumo_ameacas),
                 "alertas": alertas_enriquecidos if alertas_enriquecidos else alertas,
             }
 

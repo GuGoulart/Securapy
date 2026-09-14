@@ -1,0 +1,26 @@
+{
+  "gerado_em": "2026-09-14 20:15:19",
+  "total_eventos": 58,
+  "total_alertas": 31,
+  "resumo_ameacas": [
+    {
+      "ip": "91.240.118.172",
+      "deteccoes": [
+        "brute_force",
+        "port_scan",
+        "blacklist"
+      ],
+      "pontuacao": 15,
+      "severidade": "CRITICA",
+      "detalhes": {
+        "brute_force": {
+          "tentativas": 5,
+          "usuarios": [
+            "admin",
+            "guest",
+            "root"
+          ],
+          "severidade": "BAIXA"
+        },
+        "port_scan": {
+          "portas": 

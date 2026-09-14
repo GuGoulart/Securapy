@@ -1,0 +1,366 @@
+{
+  "gerado_em": "2026-09-14 20:15:56",
+  "total_eventos": 58,
+  "total_alertas": 31,
+  "resumo_ameacas": [
+    {
+      "ip": "91.240.118.172",
+      "deteccoes": [
+        "brute_force",
+        "port_scan",
+        "blacklist"
+      ],
+      "pontuacao": 15,
+      "severidade": "CRITICA",
+      "detalhes": {
+        "brute_force": {
+          "tentativas": 5,
+          "usuarios": [
+            "guest",
+            "admin",
+            "root"
+          ],
+          "severidade": "BAIXA"
+        },
+        "port_scan": {
+          "portas": [
+            "22",
+            "3389",
+            "445"
+          ],
+          "quantidade": 3,
+          "severidade": "MEDIA"
+        },
+        "blacklist": 11
+      }
+    },
+    {
+      "ip": "185.220.101.1",
+      "deteccoes": [
+        "brute_force",
+        "port_scan",
+        "blacklist"
+      ],
+      "pontuacao": 15,
+      "severidade": "CRITICA",
+      "detalhes": {
+        "brute_force": {
+          "tentativas": 11,
+          "usuarios": [
+            "sa",
+            "admin",
+            "root",
+            "test"
+          ],
+          "severidade": "ALTA"
+        },
+        "port_scan": {
+          "portas": [
+            "139",
+            "21",
+            "22",
+            "23",
+            "3306",
+            "445",
+            "8080"
+          ],
+          "quantidade": 7,
+          "severidade": "ALTA"
+        },
+        "blacklist": 25
+      }
+    },
+    {
+      "ip": "45.33.32.156",
+      "deteccoes": [
+        "blacklist"
+      ],
+      "pontuacao": 5,
+      "severidade": "MEDIA",
+      "detalhes": {
+        "blacklist": 8
+      }
+    }
+  ],
+  "alertas": [
+    {
+      "timestamp": "2025-02-20 08:15:01",
+      "regra": "Login com Usuário Privilegiado",
+      "regra_id": "R001",
+      "severidade": "MEDIA",
+      "pontuacao": 6,
+      "ip": "185.220.101.1",
+      "descricao": "Tentativa de login com usuário root, admin, sa ou oracle (usuário 'admin')"
+    },
+    {
+      "timestamp": "2025-02-20 08:15:02",
+      "regra": "Login com Usuário Privilegiado",
+      "regra_id": "R001",
+      "severidade": "MEDIA",
+      "pontuacao": 6,
+      "ip": "185.220.101.1",
+      "descricao": "Tentativa de login com usuário root, admin, sa ou oracle (usuário 'root')"
+    },
+    {
+      "timestamp": "2025-02-20 08:15:05",
+      "regra": "Login com Usuário Privilegiado",
+      "regra_id": "R001",
+      "severidade": "MEDIA",
+      "pontuacao": 6,
+      "ip": "91.240.118.172",
+      "descricao": "Tentativa de login com usuário root, admin, sa ou oracle (usuário 'admin')"
+    },
+    {
+      "timestamp": "2025-02-20 08:15:08",
+      "regra": "Login com Usuário Privilegiado",
+      "regra_id": "R001",
+      "severidade": "MEDIA",
+      "pontuacao": 6,
+      "ip": "185.220.101.1",
+      "descricao": "Tentativa de login com usuário root, admin, sa ou oracle (usuário 'admin')"
+    },
+    {
+      "timestamp": "2025-02-20 08:15:12",
+      "regra": "Login com Usuário Privilegiado",
+      "regra_id": "R001",
+      "severidade": "MEDIA",
+      "pontuacao": 6,
+      "ip": "91.240.118.172",
+      "descricao": "Tentativa de login com usuário root, admin, sa ou oracle (usuário 'root')"
+    },
+    {
+      "timestamp": "2025-02-20 08:15:15",
+      "regra": "Login com Usuário Privilegiado",
+      "regra_id": "R001",
+      "severidade": "MEDIA",
+      "pontuacao": 6,
+      "ip": "45.33.32.156",
+      "descricao": "Tentativa de login com usuário root, admin, sa ou oracle (usuário 'admin')"
+    },
+    {
+      "timestamp": "2025-02-20 08:15:16",
+      "regra": "Login com Usuário Privilegiado",
+      "regra_id": "R001",
+      "severidade": "MEDIA",
+      "pontuacao": 6,
+      "ip": "185.220.101.1",
+      "descricao": "Tentativa de login com usuário root, admin, sa ou oracle (usuário 'admin')"
+    },
+    {
+      "timestamp": "2025-02-20 08:15:18",
+      "regra": "Login com Usuário Privilegiado",
+      "regra_id": "R001",
+      "severidade": "MEDIA",
+      "pontuacao": 6,
+      "ip": "185.220.101.1",
+      "descricao": "Tentativa de login com usuário root, admin, sa ou oracle (usuário 'root')"
+    },
+    {
+      "timestamp": "2025-02-20 08:15:22",
+      "regra": "Login com Usuário Privilegiado",
+      "regra_id": "R001",
+      "severidade": "MEDIA",
+      "pontuacao": 6,
+      "ip": "185.220.101.1",
+      "descricao": "Tentativa de login com usuário root, admin, sa ou oracle (usuário 'admin')"
+    },
+    {
+      "timestamp": "2025-02-20 08:15:28",
+      "regra": "Login com Usuário Privilegiado",
+      "regra_id": "R001",
+      "severidade": "MEDIA",
+      "pontuacao": 6,
+      "ip": "185.220.101.1",
+      "descricao": "Tentativa de login com usuário root, admin, sa ou oracle (usuário 'sa')"
+    },
+    {
+      "timestamp": "2025-02-20 08:15:30",
+      "regra": "Login com Usuário Privilegiado",
+      "regra_id": "R001",
+      "severidade": "MEDIA",
+      "pontuacao": 6,
+      "ip": "91.240.118.172",
+      "descricao": "Tentativa de login com usuário root, admin, sa ou oracle (usuário 'admin')"
+    },
+    {
+      "timestamp": "2025-02-20 08:15:33",
+      "regra": "Login com Usuário Privilegiado",
+      "regra_id": "R001",
+      "severidade": "MEDIA",
+      "pontuacao": 6,
+      "ip": "185.220.101.1",
+      "descricao": "Tentativa de login com usuário root, admin, sa ou oracle (usuário 'root')"
+    },
+    {
+      "timestamp": "2025-02-20 08:15:38",
+      "regra": "Login com Usuário Privilegiado",
+      "regra_id": "R001",
+      "severidade": "MEDIA",
+      "pontuacao": 6,
+      "ip": "185.220.101.1",
+      "descricao": "Tentativa de login com usuário root, admin, sa ou oracle (usuário 'admin')"
+    },
+    {
+      "timestamp": "2025-02-20 08:15:40",
+      "regra": "Login com Usuário Privilegiado",
+      "regra_id": "R001",
+      "severidade": "MEDIA",
+      "pontuacao": 6,
+      "ip": "185.220.101.1",
+      "descricao": "Tentativa de login com usuário root, admin, sa ou oracle (usuário 'root')"
+    },
+    {
+      "timestamp": "2025-02-20 08:15:45",
+      "regra": "Login com Usuário Privilegiado",
+      "regra_id": "R001",
+      "severidade": "MEDIA",
+      "pontuacao": 6,
+      "ip": "91.240.118.172",
+      "descricao": "Tentativa de login com usuário root, admin, sa ou oracle (usuário 'admin')"
+    },
+    {
+      "timestamp": "2025-02-20 08:15:48",
+      "regra": "Login com Usuário Privilegiado",
+      "regra_id": "R001",
+      "severidade": "MEDIA",
+      "pontuacao": 6,
+      "ip": "45.33.32.156",
+      "descricao": "Tentativa de login com usuário root, admin, sa ou oracle (usuário 'oracle')"
+    },
+    {
+      "timestamp": "2025-02-20 08:10:02",
+      "regra": "Acesso a Porta Crítica Bloqueado",
+      "regra_id": "R002",
+      "severidade": "ALTA",
+      "pontuacao": 7,
+      "ip": "185.220.101.1",
+      "descricao": "Firewall bloqueou acesso a portas sensíveis (porta 22)"
+    },
+    {
+      "timestamp": "2025-02-20 08:10:05",
+      "regra": "Acesso a Porta Crítica Bloqueado",
+      "regra_id": "R002",
+      "severidade": "ALTA",
+      "pontuacao": 7,
+      "ip": "91.240.118.172",
+      "descricao": "Firewall bloqueou acesso a portas sensíveis (porta 3389)"
+    },
+    {
+      "timestamp": "2025-02-20 08:10:06",
+      "regra": "Acesso a Porta Crítica Bloqueado",
+      "regra_id": "R002",
+      "severidade": "ALTA",
+      "pontuacao": 7,
+      "ip": "185.220.101.1",
+      "descricao": "Firewall bloqueou acesso a portas sensíveis (porta 23)"
+    },
+    {
+      "timestamp": "2025-02-20 08:10:10",
+      "regra": "Acesso a Porta Crítica Bloqueado",
+      "regra_id": "R002",
+      "severidade": "ALTA",
+      "pontuacao": 7,
+      "ip": "185.220.101.1",
+      "descricao": "Firewall bloqueou acesso a portas sensíveis (porta 445)"
+    },
+    {
+      "timestamp": "2025-02-20 08:10:12",
+      "regra": "Acesso a Porta Crítica Bloqueado",
+      "regra_id": "R002",
+      "severidade": "ALTA",
+      "pontuacao": 7,
+      "ip": "45.33.32.156",
+      "descricao": "Firewall bloqueou acesso a portas sensíveis (porta 1433)"
+    },
+    {
+      "timestamp": "2025-02-20 08:10:20",
+      "regra": "Acesso a Porta Crítica Bloqueado",
+      "regra_id": "R002",
+      "severidade": "ALTA",
+      "pontuacao": 7,
+      "ip": "91.240.118.172",
+      "descricao": "Firewall bloqueou acesso a portas sensíveis (porta 22)"
+    },
+    {
+      "timestamp": "2025-02-20 08:10:22",
+      "regra": "Acesso a Porta Crítica Bloqueado",
+      "regra_id": "R002",
+      "severidade": "ALTA",
+      "pontuacao": 7,
+      "ip": "185.220.101.1",
+      "descricao": "Firewall bloqueou acesso a portas sensíveis (porta 3306)"
+    },
+    {
+      "timestamp": "2025-02-20 08:10:28",
+      "regra": "Acesso a Porta Crítica Bloqueado",
+      "regra_id": "R002",
+      "severidade": "ALTA",
+      "pontuacao": 7,
+      "ip": "45.33.32.156",
+      "descricao": "Firewall bloqueou acesso a portas sensíveis (porta 5432)"
+    },
+    {
+      "timestamp": "2025-02-20 08:10:33",
+      "regra": "Acesso a Porta Crítica Bloqueado",
+      "regra_id": "R002",
+      "severidade": "ALTA",
+      "pontuacao": 7,
+      "ip": "91.240.118.172",
+      "descricao": "Firewall bloqueou acesso a portas sensíveis (porta 445)"
+    },
+    {
+      "timestamp": "2025-02-20 08:20:06",
+      "regra": "Reconhecimento Web",
+      "regra_id": "R005",
+      "severidade": "MEDIA",
+      "pontuacao": 5,
+      "ip": "185.220.101.1",
+      "descricao": "Acesso a URLs comuns de reconhecimento/enumeração (URL '/admin')"
+    },
+    {
+      "timestamp": "2025-02-20 08:20:08",
+      "regra": "Tentativa de Path Traversal",
+      "regra_id": "R003",
+      "severidade": "CRITICA",
+      "pontuacao": 9,
+      "ip": "91.240.118.172",
+      "descricao": "URL contém padrões de path traversal (../) (URL '/../../etc/passwd')"
+    },
+    {
+      "timestamp": "2025-02-20 08:20:15",
+      "regra": "Tentativa de XSS",
+      "regra_id": "R004",
+      "severidade": "ALTA",
+      "pontuacao": 8,
+      "ip": "45.33.32.156",
+      "descricao": "URL contém padrões de Cross-Site Scripting (URL '/search?q=<script>alert(1)</script>')"
+    },
+    {
+      "timestamp": "2025-02-20 08:20:18",
+      "regra": "Reconhecimento Web",
+      "regra_id": "R005",
+      "severidade": "MEDIA",
+      "pontuacao": 5,
+      "ip": "91.240.118.172",
+      "descricao": "Acesso a URLs comuns de reconhecimento/enumeração (URL '/wp-admin')"
+    },
+    {
+      "timestamp": "2025-02-20 08:20:20",
+      "regra": "Reconhecimento Web",
+      "regra_id": "R005",
+      "severidade": "MEDIA",
+      "pontuacao": 5,
+      "ip": "91.240.118.172",
+      "descricao": "Acesso a URLs comuns de reconhecimento/enumeração (URL '/phpmyadmin')"
+    },
+    {
+      "timestamp": "2025-02-20 08:20:28",
+      "regra": "Reconhecimento Web",
+      "regra_id": "R005",
+      "severidade": "MEDIA",
+      "pontuacao": 5,
+      "ip": "45.33.32.156",
+      "descricao": "Acesso a URLs comuns de reconhecimento/enumeração (URL '/shell.php')"
+    }
+  ]
+}
